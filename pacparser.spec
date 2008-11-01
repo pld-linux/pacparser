@@ -49,6 +49,8 @@ Pliki nagłówkowe biblioteki pacparser.
 %prep
 %setup -q
 
+%{__sed} -i -e "s#/usr/lib#%{_libdir}#" Makefile
+
 %build
 %{__make}
 
