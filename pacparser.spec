@@ -1,12 +1,13 @@
 Summary:	A library to make your web software pac (proxy auto-config) files intelligent
 Summary(pl.UTF-8):	-
 Name:		pacparser
-Version:	1.0.6
+Version:	1.0.8
 Release:	0.1
 License:	GPL v3
 Group:		Libraries
 Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}.tar.gz
-# Source0-md5:	692b2c59070a67ea7ccd4b3f9e4d7e29
+# Source0-md5:	3aec8fd4473a24698f7f4aefb0a79069
+Patch0:		%{name}-include_path.patch
 URL:		http://code.google.com/p/pacparser/
 BuildRequires:	js-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -48,11 +49,13 @@ Pliki nagłówkowe biblioteki pacparser.
 
 %prep
 %setup -q
-
-%{__sed} -i -e "s#/usr/lib#%{_libdir}#" Makefile
+%patch0 -p1
 
 %build
-%{__make}
+%{__make} \
+	CC="%{__cc}" \
+	CFLAGS="%{rpmcflags} -I/usr/include/js -DXP_UNIX" \
+	LDFLAGS="%{rpmldflags} -ljs"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -72,11 +75,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README
 %attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/lib*.so.*
-%{_mandir}/man1/*
+%attr(755,root,root) %ghost %{_libdir}/libpacparser.so.1
+%{_mandir}/man1/pactester.1*
 
 %files devel
 %defattr(644,root,root,755)
-%{_mandir}/man3/*
-%{_libdir}/lib*.so
+%{_mandir}/man3/pacparser*.3*
+%{_libdir}/libpacparser.so
 %{_includedir}/pacparser.h
