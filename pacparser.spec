@@ -2,10 +2,10 @@
 # TODO:	pl
 #
 Summary:	A library to make your web software pac (proxy auto-config) files intelligent
-Summary(pl.UTF-8):	-
+Summary(pl.UTF-8):	Biblioteka do obsługi plików pac (automatycznej konfiguracji proxy)
 Name:		pacparser
 Version:	1.0.9
-Release:	0.1
+Release:	1
 License:	GPL v3
 Group:		Libraries
 Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}.tar.gz
