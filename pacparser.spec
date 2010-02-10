@@ -1,5 +1,6 @@
-#
-# TODO:	pl
+# TODO:
+# - description pl
+# - python module (make pymod, unset SONAME for python module)
 #
 Summary:	A library to make your web software pac (proxy auto-config) files intelligent
 Summary(pl.UTF-8):	Biblioteka do obsługi plików pac (automatycznej konfiguracji proxy)
