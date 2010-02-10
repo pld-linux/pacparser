@@ -10,7 +10,7 @@ License:	GPL v3
 Group:		Libraries
 Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}.tar.gz
 # Source0-md5:	32f502bee4233c8a7a6bdc1b1158b36b
-Patch0:		%{name}-include_path.patch
+Patch0:		%{name}-make.patch
 URL:		http://code.google.com/p/pacparser/
 BuildRequires:	js-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -76,7 +76,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README
 %attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %ghost %{_libdir}/libpacparser.so.1
+%attr(755,root,root) %{_libdir}/libpacparser.so.1
 %{_mandir}/man1/pactester.1*
 
 %files devel
