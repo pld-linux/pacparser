@@ -1,0 +1,97 @@
+--- pacparser-1.0.9/Makefile.orig	2009-11-25 13:07:37.000000000 +0100
++++ pacparser-1.0.9/Makefile	2010-02-10 18:37:01.000000000 +0100
+@@ -23,7 +23,6 @@
+ ifeq ($(OS_ARCH),Linux)
+   SO_SUFFIX = so
+   MKSHLIB = $(CC) -shared
+-  LDFLAGS += -Wl,-soname=$(LIBRARY)
+ endif
+ ifeq ($(OS_ARCH),Darwin)
+   SO_SUFFIX = dylib
+@@ -32,64 +31,12 @@
+ 
+ LIB_VER = 1
+ CFLAGS = -g -DXP_UNIX -Wall
+-SHFLAGS = -fPIC
++SHFLAGS = -fPIC -Wl,-soname=$(LIBRARY)
+ 
+ ifndef PYTHON
+   PYTHON = python
+ endif
+ 
+-NOSO = clean
+-
+-ifndef SM_LIB
+-ifeq (yes, $(shell [ -e /usr/lib/libjs.$(SO_SUFFIX) -o -e /usr/local/lib/libjs.$(SO_SUFFIX) ] && echo yes))
+-  SM_LIB = -ljs
+-else
+-  ifeq (yes, $(shell [ -e /opt/local/lib/libjs.$(SO_SUFFIX) ] && echo yes))
+-    SM_LIB = -ljs
+-    LDFLAGS += -L/opt/local/lib
+-  else
+-    ifeq (yes, $(shell [ -e /usr/lib/libsmjs.$(SO_SUFFIX) ] && echo yes))
+-      SM_LIB = -lsmjs
+-    else
+-      ifeq (yes, $(shell [ -e /usr/lib/libmozjs.$(SO_SUFFIX) ] && echo yes))
+-        SM_LIB = -lmozjs
+-      endif
+-    endif
+-  endif
+-endif
+-endif
+-
+-ifndef SM_INC
+-ifeq (yes, $(shell [ -e /usr/local/include/js ] && echo yes))
+-  SM_INC = -I/usr/local/include/js
+-else
+-  ifeq (yes, $(shell [ -e /opt/local/include/js ] && echo yes))
+-    SM_INC = -I/opt/local/include/js
+-  else
+-    ifeq (yes, $(shell [ -e /usr/include/smjs ] && echo yes))
+-      SM_INC = -I/usr/include/smjs
+-    else
+-      ifeq (yes, $(shell [ -e /usr/include/mozjs ] && echo yes))
+-        SM_INC = -I/usr/include/mozjs
+-      endif
+-    endif
+-  endif
+-endif
+-endif
+-
+-ifeq ($(NOSO), $(filter-out $(MAKECMDGOALS),$(NOSO)))
+-  ifndef SM_LIB
+-  $(error SpiderMonkey library not found. See 'README_SM' file.)
+-  else
+-    LDFLAGS += ${SM_LIB}
+-  endif
+-  ifdef SM_INC
+-    CFLAGS += ${SM_INC}
+-  else
+-    $(error SpiderMonkey api not found. See 'README_SM' file.)
+-  endif
+-endif
+-
+ LIBRARY = libpacparser.$(SO_SUFFIX).$(LIB_VER)
+ PREFIX ?= /usr
+ LIB_PREFIX = $(DESTDIR)$(PREFIX)/lib
+@@ -101,17 +48,17 @@
+ all: pactester
+ 
+ pacparser.o: pacparser.c pac_utils.h
+-	$(CC) $(CFLAGS) $(SHFLAGS) -c pacparser.c -o pacparser.o
++	$(CC) $(CFLAGS) -c pacparser.c -o pacparser.o
+ 	touch pymod/pacparser_o_buildstamp
+ 
+ $(LIBRARY): pacparser.o
+-	$(MKSHLIB) -o $(LIBRARY) pacparser.o $(LDFLAGS)
++	$(MKSHLIB) -o $(LIBRARY) pacparser.o $(LDFLAGS) $(SHFLAGS)
+ 
+ libpacparser.$(SO_SUFFIX): $(LIBRARY)
+ 	ln -sf $(LIBRARY) libpacparser.$(SO_SUFFIX)
+ 
+ pactester: pactester.c pacparser.h libpacparser.$(SO_SUFFIX)
+-	$(CC) pactester.c -o pactester -lpacparser -L. -I.
++	$(CC) $(CFLAGS) $(LDFLAGS) pactester.c -o pactester -lpacparser -L. -I.
+ 
+ install: all
+ 	install -d $(LIB_PREFIX) $(INC_PREFIX) $(BIN_PREFIX)
