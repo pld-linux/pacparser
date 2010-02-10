@@ -1,12 +1,15 @@
+#
+# TODO:	pl
+#
 Summary:	A library to make your web software pac (proxy auto-config) files intelligent
 Summary(pl.UTF-8):	-
 Name:		pacparser
-Version:	1.0.8
+Version:	1.0.9
 Release:	0.1
 License:	GPL v3
 Group:		Libraries
 Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}.tar.gz
-# Source0-md5:	3aec8fd4473a24698f7f4aefb0a79069
+# Source0-md5:	32f502bee4233c8a7a6bdc1b1158b36b
 Patch0:		%{name}-include_path.patch
 URL:		http://code.google.com/p/pacparser/
 BuildRequires:	js-devel
@@ -32,8 +35,6 @@ now). It comes as a shared C library and a python module which can be
 used to make any C or python program PAC scripts intelligent. Some
 very useful targets could be popular web software like wget, curl and
 python-urllib.
-
-%description -l pl.UTF-8
 
 %package devel
 Summary:	Header files for pacparser library
