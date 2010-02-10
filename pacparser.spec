@@ -12,6 +12,7 @@ Group:		Libraries
 Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}.tar.gz
 # Source0-md5:	32f502bee4233c8a7a6bdc1b1158b36b
 Patch0:		%{name}-make.patch
+Patch1:		%{name}-libdir.patch
 URL:		http://code.google.com/p/pacparser/
 BuildRequires:	js-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -52,18 +53,21 @@ Pliki nagłówkowe biblioteki pacparser.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__make} \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags} -I/usr/include/js -DXP_UNIX" \
-	LDFLAGS="%{rpmldflags} -ljs"
+	LDFLAGS="%{rpmldflags} -ljs" \
+	LIB=%{_lib}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	LIB=%{_lib}
 
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}
 
