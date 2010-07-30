@@ -2,15 +2,16 @@
 # - description pl
 # - python module (make pymod, unset SONAME for python module)
 #
+%define		_rc	rc2
 Summary:	A library to make your web software pac (proxy auto-config) files intelligent
 Summary(pl.UTF-8):	Biblioteka do obsługi plików pac (automatycznej konfiguracji proxy)
 Name:		pacparser
-Version:	1.1.1
-Release:	1
+Version:	1.2.0
+Release:	0.%{_rc}.1
 License:	GPL v3+
 Group:		Libraries
-Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}.tar.gz
-# Source0-md5:	884412e79f22c46f513674c3e469e270
+Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}%{_rc}.tar.gz
+# Source0-md5:	f1625f2eb83405b94e5e4298aff7b477
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-libdir.patch
 URL:		http://code.google.com/p/pacparser/
@@ -51,11 +52,12 @@ Header files for pacparser library.
 Pliki nagłówkowe biblioteki pacparser.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}%{_rc}
 %patch0 -p1
 %patch1 -p1
 
 %build
+cd src
 %{__make} \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags} -I/usr/include/js -DXP_UNIX" \
@@ -65,6 +67,7 @@ Pliki nagłówkowe biblioteki pacparser.
 %install
 rm -rf $RPM_BUILD_ROOT
 
+cd src
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	LIB=%{_lib}
