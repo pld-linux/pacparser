@@ -2,7 +2,7 @@
 # - description pl
 # - python module (make pymod, unset SONAME for python module)
 #
-%define		_rc	rc2
+%define		_rc	rc3
 Summary:	A library to make your web software pac (proxy auto-config) files intelligent
 Summary(pl.UTF-8):	Biblioteka do obsługi plików pac (automatycznej konfiguracji proxy)
 Name:		pacparser
@@ -11,7 +11,7 @@ Release:	0.%{_rc}.1
 License:	GPL v3+
 Group:		Libraries
 Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}%{_rc}.tar.gz
-# Source0-md5:	f1625f2eb83405b94e5e4298aff7b477
+# Source0-md5:	79302484868faa10a81e57e98ed1a7d2
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-libdir.patch
 URL:		http://code.google.com/p/pacparser/
