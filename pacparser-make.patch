@@ -1,8 +1,8 @@
---- pacparser-1.1.1/Makefile~	2010-06-19 10:17:44.000000000 +0200
-+++ pacparser-1.1.1/Makefile	2010-07-30 10:41:23.360530968 +0200
-@@ -54,24 +54,18 @@
+--- pacparser-1.2.0rc2/src/Makefile~	2010-07-30 10:29:08.446447618 +0200
++++ pacparser-1.2.0rc2/src/Makefile	2010-07-30 10:29:06.156447979 +0200
+@@ -58,24 +58,18 @@
  .PHONY: clean pymod install-pymod
- all: pactester
+ all: testpactester
  
 -jsapi: spidermonkey/js.tar.gz
 -	cd spidermonkey && $(MAKE) jsapi
@@ -20,12 +20,12 @@
 +$(LIBRARY): pacparser.o
 +	$(MKSHLIB) $(LIB_OPTS) -o $(LIBRARY) pacparser.o $(LDFLAGS)
  
- libpacparser.$(SO_SUFFIX): $(LIBRARY)
- 	ln -sf $(LIBRARY) libpacparser.$(SO_SUFFIX)
+ $(LIBRARY_LINK): $(LIBRARY)
+ 	ln -sf $(LIBRARY) $(LIBRARY_LINK)
  
- pactester: pactester.c pacparser.h libpacparser.$(SO_SUFFIX)
+ pactester: pactester.c pacparser.h $(LIBRARY_LINK)
 -	$(CC) pactester.c -o pactester -lpacparser -L. -I.
 +	$(CC) $(CFLAGS) $(LDFLAGS) pactester.c -o pactester -lpacparser -L. -I.
  
- install: all
- 	install -d $(LIB_PREFIX) $(INC_PREFIX) $(BIN_PREFIX)
+ testpactester: pactester
+ 	echo "Running tests for pactester."

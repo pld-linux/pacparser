@@ -1,11 +1,11 @@
---- pacparser-1.1.1/Makefile~	2010-07-30 10:41:55.756371202 +0200
-+++ pacparser-1.1.1/Makefile	2010-07-30 10:42:17.029701260 +0200
-@@ -45,7 +45,7 @@
- LDFLAGS += -lm
+--- pacparser-1.2.0rc2/src/Makefile~	2010-07-30 10:04:31.984092717 +0200
++++ pacparser-1.2.0rc2/src/Makefile	2010-07-30 10:05:19.269915096 +0200
+@@ -50,7 +50,7 @@
  
- LIBRARY = libpacparser.$(SO_SUFFIX).$(LIB_VER)
--LIB_PREFIX = $(DESTDIR)$(PREFIX)/lib
-+LIB_PREFIX = $(DESTDIR)$(PREFIX)/$(LIB)
- PYLIB_PREFIX = $(DESTDIR)$(PREFIX)/lib
- INC_PREFIX = $(DESTDIR)$(PREFIX)/include
- BIN_PREFIX = $(DESTDIR)$(PREFIX)/bin
+ LIBRARY_LINK = $(LIBRARY_NAME).$(SO_SUFFIX)
+ PREFIX := $(DESTDIR)$(PREFIX)
+-LIB_PREFIX = $(PREFIX)/lib
++LIB_PREFIX = $(PREFIX)/$(LIB)
+ INC_PREFIX = $(PREFIX)/include
+ BIN_PREFIX = $(PREFIX)/bin
+ MAN_PREFIX = $(PREFIX)/share/man
