@@ -1,17 +1,18 @@
---- pacparser-1.2.0rc2/src/Makefile~	2010-07-30 10:29:08.446447618 +0200
-+++ pacparser-1.2.0rc2/src/Makefile	2010-07-30 10:29:06.156447979 +0200
-@@ -58,24 +58,18 @@
+--- pacparser-1.2.2/src/Makefile~	2010-09-10 08:41:12.000000000 +0200
++++ pacparser-1.2.2/src/Makefile	2010-09-10 21:16:49.370157141 +0200
+@@ -64,25 +64,18 @@
  .PHONY: clean pymod install-pymod
  all: testpactester
  
--jsapi: spidermonkey/js.tar.gz
--	cd spidermonkey && $(MAKE) jsapi
+-jsapi_buildstamp: spidermonkey/js.tar.gz
+-	cd spidermonkey && SHFLAGS=$(SHFLAGS) $(MAKE) jsapi
+-	touch jsapi_buildstamp
 -
 -libjs.a: spidermonkey/js.tar.gz
--	cd spidermonkey && $(MAKE) jslib
+-	cd spidermonkey && SHFLAGS=$(SHFLAGS) $(MAKE) jslib
 -
--pacparser.o: pacparser.c pac_utils.h jsapi
-+pacparser.o: pacparser.c pac_utils.h
+-pacparser.o: pacparser.c pac_utils.h pacparser.h jsapi_buildstamp
++pacparser.o: pacparser.c pac_utils.h pacparser.h
  	$(CC) $(CFLAGS) $(SHFLAGS) -c pacparser.c -o pacparser.o
  	touch pymod/pacparser_o_buildstamp
  
