@@ -1,5 +1,6 @@
-# TODO:
-# - python module (make pymod, unset SONAME for python module)
+#
+# Conditional build:
+%bcond_without	python	# Python module
 #
 Summary:	A library to make your web software pac (proxy auto-config) files intelligent
 Summary(pl.UTF-8):	Biblioteka do obsługi plików pac (automatycznej konfiguracji proxy)
@@ -13,8 +14,15 @@ Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}.tar.gz
 #Source0Download: http://code.google.com/p/pacparser/downloads/list
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-libdir.patch
+Patch2:		%{name}-python.patch
 URL:		http://code.google.com/p/pacparser/
 BuildRequires:	js-devel
+BuildRequires:	rpmbuild(macros) >= 1.566
+BuildRequires:	sed >= 4.0
+%if %{with python}
+BuildRequires:	python-devel
+BuildRequires:	rpm-pythonprov
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -66,10 +74,25 @@ Header files for pacparser library.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki pacparser.
 
+%package -n python-pacparser
+Summary:	Python interface for pacparser library
+Summary(pl.UTF-8):	Interfejs Pythona do biblioteki pacparser
+Group:		Libraries/Python
+Requires:	%{name} = %{version}-%{release}
+%pyrequires_eq	python-libs
+
+%description -n python-pacparser
+Python interface for pacparser library.
+
+%description -n python-pacparser -l pl.UTF-8
+Interfejs Pythona do biblioteki pacparser.
+
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%undos src/pymod/setup.py
+%patch2 -p1
 
 %build
 %{__make} -C src \
@@ -78,12 +101,28 @@ Pliki nagłówkowe biblioteki pacparser.
 	LDFLAGS="%{rpmldflags} -ljs" \
 	LIB=%{_lib}
 
+%if %{with python}
+cd src/pymod
+CFLAGS="%{rpmcflags}" \
+LDFLAGS="%{rpmldflags} -L$(pwd)/.." \
+%{__python} setup.py build
+%endif
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} -C src install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	LIB=%{_lib}
+
+%if %{with python}
+cd src/pymod
+%{__python} setup.py install \
+	--optimize=2 \
+	--root=$RPM_BUILD_ROOT
+
+%py_postclean
+%endif
 
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}
 
@@ -105,3 +144,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libpacparser.so
 %{_includedir}/pacparser.h
 %{_mandir}/man3/pacparser*.3*
+
+%if %{with python}
+%files -n python-pacparser
+%defattr(644,root,root,755)
+%dir %{py_sitedir}/pacparser
+%attr(755,root,root) %{py_sitedir}/pacparser/_pacparser.so
+%{py_sitedir}/pacparser/__init__.py[co]
+%{py_sitedir}/pacparser-1-py*.egg-info
+%endif
