@@ -5,18 +5,19 @@
 Summary:	A library to make your web software pac (proxy auto-config) files intelligent
 Summary(pl.UTF-8):	Biblioteka do obsługi plików pac (automatycznej konfiguracji proxy)
 Name:		pacparser
-Version:	1.3.0
+Version:	1.3.1
 Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	http://pacparser.googlecode.com/files/%{name}-%{version}.tar.gz
-# Source0-md5:	6dcfda10803913df38249fb39990dd87
+# Source0-md5:	97010ef3c18f81f8734e3cc3d6f92619
 #Source0Download: http://code.google.com/p/pacparser/downloads/list
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-libdir.patch
 Patch2:		%{name}-python.patch
 URL:		http://code.google.com/p/pacparser/
-BuildRequires:	js-devel
+BuildRequires:	js-devel >= 1.7.0
+BuildRequires:	js-devel < 1.8.5
 BuildRequires:	rpmbuild(macros) >= 1.566
 BuildRequires:	sed >= 4.0
 %if %{with python}
